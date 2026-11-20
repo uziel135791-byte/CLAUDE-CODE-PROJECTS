@@ -1,0 +1,12 @@
+# Claves y datos personales: nunca a git
+.env
+perfil_privado.md
+data/real/*
+!data/real/.gitkeep
+memory/*
+!memory/.gitkeep
+# La demo se regenera con data/generar_demo.py (semilla fija)
+data/demo/
+__pycache__/
+*.pyc
+.DS_Store
