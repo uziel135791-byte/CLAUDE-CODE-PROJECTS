@@ -8,6 +8,7 @@ dentro de una frase, el tiempo de cada palabra se reparte según su longitud.
 import io
 import json
 import os
+import subprocess
 import sys
 import wave
 
@@ -15,13 +16,15 @@ import numpy as np
 from piper import PiperVoice, SynthesisConfig
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-MODEL = sys.argv[1] if len(sys.argv) > 1 else os.path.join(ROOT, 'voices', 'es_ES-sharvard-medium.onnx')
-LENGTH_SCALE = 0.86  # < 1 = un poco más rápido, ritmo de reel
+MODEL = sys.argv[1] if len(sys.argv) > 1 else os.path.join(ROOT, 'voices', 'es_ES-davefx-medium.onnx')
+LENGTH_SCALE = 0.8   # < 1 = más rápido (~3.2 palabras/s, ritmo de reel)
+NOISE, NOISE_W = 0.75, 1.0  # más variación = entonación más viva
+PITCH = 1.0          # >1 sube el tono (probado: 1.06 resta claridad)
 LEAD = 0.25          # silencio antes de la primera frase
-SEG_GAP = 0.3        # pausa extra entre segmentos
+SEG_GAP = 0.15       # pausa extra entre segmentos
 
 voice = PiperVoice.load(MODEL)
-cfg = SynthesisConfig(length_scale=LENGTH_SCALE)
+cfg = SynthesisConfig(length_scale=LENGTH_SCALE, noise_scale=NOISE, noise_w_scale=NOISE_W)
 script = json.load(open(os.path.join(ROOT, 'reel_script.json'), encoding='utf-8'))
 
 
@@ -32,7 +35,11 @@ def synth(text):
     buf.seek(0)
     with wave.open(buf, 'rb') as r:
         sr = r.getframerate()
-        x = np.frombuffer(r.readframes(r.getnframes()), dtype='<i2').astype(np.float32) / 32768
+    # Sube el tono sin cambiar la duración (ffmpeg + rubberband), si PITCH != 1.
+    af = f'rubberband=pitch={PITCH}:formant=preserved' if PITCH != 1.0 else 'anull'
+    raw = subprocess.run(['ffmpeg', '-nostdin', '-loglevel', 'error', '-i', '-', '-af', af,
+                          '-f', 's16le', '-ac', '1', '-ar', str(sr), '-'], input=buf.getvalue(), capture_output=True, check=True).stdout
+    x = np.frombuffer(raw, dtype='<i2').astype(np.float32) / 32768
     # Recorta silencio inicial y final.
     win = int(sr * 0.01)
     e = np.sqrt(np.convolve(x ** 2, np.ones(win) / win, mode='same'))
@@ -47,12 +54,39 @@ def synth(text):
 def pause_after(text):
     t = text.rstrip()
     if t.endswith(('.', '?', '!')):
-        return 0.32
-    if t.endswith(':'):
         return 0.2
+    if t.endswith(':'):
+        return 0.12
     if t.endswith(','):
-        return 0.14
-    return 0.08
+        return 0.08
+    return 0.04
+
+
+TAKES = 4  # tomas por frase; se queda la que Whisper entiende mejor
+
+
+def norm(s):
+    import re
+    import unicodedata
+    s = unicodedata.normalize('NFKD', s.lower().replace('‑', '-'))
+    s = ''.join(c for c in s if not unicodedata.combining(c))
+    return re.sub(r'[^a-z0-9 ]+', ' ', s).split()
+
+
+def best_take(show, say):
+    import difflib
+    from asr_check import transcribe
+    best = None
+    for _ in range(TAKES):
+        audio, sr = synth(say)
+        heard = ' '.join(w.word for w in transcribe(audio, sr))
+        score = difflib.SequenceMatcher(None, norm(show), norm(heard)).ratio()
+        if best is None or score > best[0]:
+            best = (score, audio, sr, heard.strip())
+        if score >= 0.999:
+            break
+    print(f'  {best[0]:.2f}  {show}  ->  {best[3]}')
+    return best[1], best[2]
 
 
 chunks, timing, t, sr = [], [], LEAD, None
@@ -60,7 +94,7 @@ for s in script['segments']:
     seg = {'id': s['id'], 'item': s.get('item'), 'start': round(t, 3), 'phrases': []}
     for ph in s['phrases']:
         show, say = (ph, ph) if isinstance(ph, str) else ph
-        audio, sr = synth(say)
+        audio, sr = best_take(show, say)
         dur = len(audio) / sr
         if not chunks:
             chunks.append(np.zeros(int(LEAD * sr), dtype=np.float32))

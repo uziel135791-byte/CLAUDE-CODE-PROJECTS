@@ -1,19 +1,154 @@
 {
   "_nota": "Guion del reel. Cada frase es [texto en pantalla, texto que lee la voz] o solo el texto si se lee igual.",
   "segments": [
-    { "id": "hook", "phrases": [["¿Qué hay dentro de un iPhone 16 Pro Max?", "¿Qué hay dentro de un áifon dieciséis Pro Max?"]] },
-    { "id": "open", "phrases": ["Vamos a desarmarlo."] },
-    { "id": "backGlass", "item": "backGlass", "phrases": ["El cristal trasero", "ya se cambia sin quitar la pantalla."] },
-    { "id": "magsafe", "item": "magsafe", "phrases": [["MagSafe:", "Mag Seif:"], "imanes y una bobina de cobre", ["de hasta 25 watts.", "de hasta veinticinco vatios."]] },
-    { "id": "cameraModule", "item": "cameraModule", "phrases": ["Tres cámaras:", ["dos de 48 megapíxeles", "dos de cuarenta y ocho megapíxeles,"], ["y un zoom de 5 aumentos.", "y un zoom de cinco aumentos."]] },
-    { "id": "logicBoard", "item": "logicBoard", "phrases": [["El chip A18 Pro, de 3 nanómetros,", "El chip A dieciocho Pro, de tres nanómetros,"], "en una placa doble."] },
-    { "id": "battery", "item": "battery", "phrases": [["La batería: casi 4 700 mAh.", "La batería: casi cuatro mil setecientos miliamperios."]] },
-    { "id": "taptic", "item": "taptic", "phrases": [["El Taptic Engine crea las vibraciones.", "El Táptic Ényin crea las vibraciones."]] },
-    { "id": "bottomAssy", "item": "bottomAssy", "phrases": ["Altavoz, micrófonos", ["y USB‑C con velocidad USB 3.", "y u ese be ce, con velocidad u ese be tres."]] },
-    { "id": "cameraControl", "item": "cameraControl", "phrases": ["El Control de Cámara:", "zafiro, sensor de fuerza", "y motor háptico."] },
-    { "id": "trueDepth", "item": "trueDepth", "phrases": [["Face ID proyecta", "Feis ai di proyecta"], ["más de 30 000 puntos invisibles.", "más de treinta mil puntos invisibles."]] },
-    { "id": "frame", "item": "frame", "phrases": [["Todo va en un chasis de titanio.", "Todo va en un chasis de titanio."]] },
-    { "id": "display", "item": "display", "phrases": [["Y al frente, 6.9 pulgadas", "Y al frente, seis punto nueve pulgadas"], ["a 120 hercios.", "a ciento veinte hercios."]] },
-    { "id": "outro", "phrases": [["Todo en menos de 1 cm de grosor.", "Todo, en menos de un centímetro de grosor."], "¿Qué pieza te sorprendió más?"] }
+    {
+      "id": "hook",
+      "phrases": [
+        [
+          "¿Qué hay dentro de un iPhone 16 Pro Max?",
+          "¿Qué hay dentro de un áifon dieciséis Pro Max?"
+        ]
+      ]
+    },
+    {
+      "id": "open",
+      "phrases": [
+        "Vamos a desarmarlo."
+      ]
+    },
+    {
+      "id": "backGlass",
+      "item": "backGlass",
+      "phrases": [
+        "El cristal trasero",
+        "ya se cambia sin quitar la pantalla."
+      ]
+    },
+    {
+      "id": "magsafe",
+      "item": "magsafe",
+      "phrases": [
+        [
+          "MagSafe:",
+          "Mak Séif:"
+        ],
+        "imanes y una bobina de cobre",
+        [
+          "de hasta 25 watts.",
+          "de hasta veinticinco vatios."
+        ]
+      ]
+    },
+    {
+      "id": "cameraModule",
+      "item": "cameraModule",
+      "phrases": [
+        "Tres cámaras:",
+        [
+          "dos de 48 megapíxeles",
+          "dos de cuarenta y ocho megapícsels,"
+        ],
+        [
+          "y un teleobjetivo 5x.",
+          "y un teleobjetivo de cinco aumentos."
+        ]
+      ]
+    },
+    {
+      "id": "logicBoard",
+      "item": "logicBoard",
+      "phrases": [
+        [
+          "El chip A18 Pro, de 3 nanómetros,",
+          "El chip, A dieciocho Pro, de tres nanómetros,"
+        ],
+        "en una placa doble."
+      ]
+    },
+    {
+      "id": "battery",
+      "item": "battery",
+      "phrases": [
+        [
+          "La batería: casi 4 700 mAh.",
+          "La batería: casi cuatro mil setecientos miliamperios."
+        ]
+      ]
+    },
+    {
+      "id": "taptic",
+      "item": "taptic",
+      "phrases": [
+        [
+          "El Taptic Engine crea las vibraciones.",
+          "El Táptic Éndyin crea las vibraciones."
+        ]
+      ]
+    },
+    {
+      "id": "bottomAssy",
+      "item": "bottomAssy",
+      "phrases": [
+        "Altavoz, micrófonos",
+        [
+          "y USB‑C con velocidad de USB 3.",
+          "y u ese be ce, con velocidad de u ese be tres."
+        ]
+      ]
+    },
+    {
+      "id": "cameraControl",
+      "item": "cameraControl",
+      "phrases": [
+        "El Control de Cámara:",
+        "cristal de zafiro, sensor de fuerza",
+        "y motor háptico."
+      ]
+    },
+    {
+      "id": "trueDepth",
+      "item": "trueDepth",
+      "phrases": [
+        [
+          "El Face ID proyecta",
+          "El Féis-ái-dí proyecta"
+        ],
+        [
+          "más de 30 000 puntos invisibles.",
+          "más de treinta mil puntos invisibles."
+        ]
+      ]
+    },
+    {
+      "id": "frame",
+      "item": "frame",
+      "phrases": [
+        "Todo va en un chasis de titanio."
+      ]
+    },
+    {
+      "id": "display",
+      "item": "display",
+      "phrases": [
+        [
+          "Y al frente, 6.9 pulgadas",
+          "Y al frente, seis punto nueve pulgadas"
+        ],
+        [
+          "a 120 hercios.",
+          "a ciento veinte hercios."
+        ]
+      ]
+    },
+    {
+      "id": "outro",
+      "phrases": [
+        [
+          "Todo en menos de 1 cm de grosor.",
+          "Todo, en menos de un centímetro de grosor."
+        ],
+        "¿Qué pieza te sorprendió más?"
+      ]
+    }
   ]
 }
