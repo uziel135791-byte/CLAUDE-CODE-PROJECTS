@@ -15,7 +15,7 @@ import numpy as np
 from piper import PiperVoice, SynthesisConfig
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-MODEL = sys.argv[1] if len(sys.argv) > 1 else os.path.join(ROOT, 'voices', 'es_MX-claude-high.onnx')
+MODEL = sys.argv[1] if len(sys.argv) > 1 else os.path.join(ROOT, 'voices', 'es_ES-sharvard-medium.onnx')
 LENGTH_SCALE = 0.86  # < 1 = un poco más rápido, ritmo de reel
 LEAD = 0.25          # silencio antes de la primera frase
 SEG_GAP = 0.3        # pausa extra entre segmentos
