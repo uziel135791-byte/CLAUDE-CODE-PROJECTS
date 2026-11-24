@@ -1,0 +1,13 @@
+{
+  "name": "iphone16-por-dentro",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Video animado: vista explosionada del iPhone 16 Pro Max, pieza por pieza (en español).",
+  "scripts": {
+    "preview": "node render.js preview 2 18 33 60",
+    "audio": "python3 audio.py 119.2 out/audio.wav"
+  },
+  "dependencies": {
+    "three": "0.169.0"
+  }
+}
