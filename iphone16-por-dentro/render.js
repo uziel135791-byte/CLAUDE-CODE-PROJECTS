@@ -1,6 +1,10 @@
 // Renderiza la animación cuadro por cuadro en Chromium sin interfaz y la codifica con ffmpeg.
 //   node render.js preview 3 18 30            -> PNG en ./preview/ en esos segundos
 //   node render.js video <inicio> <fin> <salida.mp4>   -> segmento de video (30 fps)
+//   Agrega --reel para usar la versión vertical (reel.html, 1080×1920).
+const REEL = process.argv.includes('--reel');
+const PAGE = REEL ? 'reel.html' : 'index.html';
+const VW = REEL ? 1080 : 1920, VH = REEL ? 1920 : 1080;
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
@@ -9,7 +13,7 @@ const { chromium } = require('playwright');
 
 const ROOT = __dirname;
 const FPS = 30;
-const TYPES = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json' };
+const TYPES = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.wav': 'audio/wav' };
 
 function serve() {
   const server = http.createServer((req, res) => {
@@ -28,16 +32,16 @@ function serve() {
 
 async function open(server) {
   const browser = await chromium.launch({ args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
-  const page = await browser.newPage({ viewport: { width: 1920, height: 1080 }, deviceScaleFactor: 1 });
+  const page = await browser.newPage({ viewport: { width: VW, height: VH }, deviceScaleFactor: 1 });
   page.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') console.error('[page]', m.text()); });
   page.on('pageerror', (e) => console.error('[pageerror]', e.message));
-  await page.goto(`http://127.0.0.1:${server.address().port}/index.html`);
+  await page.goto(`http://127.0.0.1:${server.address().port}/${PAGE}`);
   await page.waitForFunction(() => window.READY === true, null, { timeout: 120000 });
   return { browser, page };
 }
 
 (async () => {
-  const [mode, ...args] = process.argv.slice(2);
+  const [mode, ...args] = process.argv.slice(2).filter((a) => a !== '--reel');
   const server = await serve();
   const { browser, page } = await open(server);
   const duration = await page.evaluate(() => window.DURATION);
@@ -47,7 +51,7 @@ async function open(server) {
     fs.mkdirSync(path.join(ROOT, 'preview'), { recursive: true });
     for (const s of args.map(Number)) {
       await page.evaluate((t) => window.renderAt(t), s);
-      const out = path.join(ROOT, 'preview', `t${String(s.toFixed(1)).padStart(6, '0')}.png`);
+      const out = path.join(ROOT, 'preview', `${REEL ? 'reel_' : ''}t${String(s.toFixed(1)).padStart(6, '0')}.png`);
       await page.screenshot({ path: out });
       console.log(out);
     }
